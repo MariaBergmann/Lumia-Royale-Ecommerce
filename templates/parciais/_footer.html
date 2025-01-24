@@ -1,0 +1,74 @@
+{% load static %}
+
+<footer class="container-fluid bg-primary text-light py-4">
+    <div class="container">
+        <div class="row">
+            <!-- Informações principais -->
+            <div class="col-md-6">
+                <div class="p-1">
+                    <span class="align-middle p-1">© 2025 Lúmia Royale. Todos os direitos reservados.</span>
+                </div>
+            </div>
+
+            <!-- Redes sociais -->
+            <div class="col-md-6 text-right">
+                <div class="p-1">
+                    <span class="align-middle p-1">Siga-nos:</span>
+                    <a href="https://www.facebook.com/mariaeduardabergmann" target="_blank" class="text-light mx-2">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://www.instagram.com/mariaeduardabergmann" target="_blank" class="text-light mx-2">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.tiktok.com/@mariaeduardabergmann" target="_blank" class="text-light mx-2">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção de contato -->
+        <div class="row mt-3">
+            <div class="col-12 text-center">
+                <p class="small mb-0">Entre em contato:</p>
+                <a href="https://wa.me/9999999999" target="_blank" class="text-light whatsapp-icon">
+                    <i class="fab fa-whatsapp" style="font-size: 2em; transition: transform 0.3s ease-in-out;"> </i>
+                </a>
+                <p class="small mb-0">Endereço: Rua Exemplo, 123, Bairro Fictício, Cidade Fictícia</p>
+                <p class="small mb-0">Contato: contato@lumiaroyale.com | (99) 99999-9999</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="{% static 'assets/bootstrap/js/jquery-3.2.1.slim.min.js' %}"></script>
+<script src="{% static 'assets/bootstrap/js/popper.min.js' %}"></script>
+<script src="{% static 'assets/bootstrap/js/bootstrap.min.js' %}"></script>
+<script defer src="{% static 'assets/font-awesome/js/all.js' %}"></script>
+<script src="{% static 'assets/custom/js/scripts.js' %}"></script>
+
+<!-- Interatividade do ícone WhatsApp -->
+<script>
+    const whatsappIcon = document.querySelector('.whatsapp-icon i');
+
+    // Efeito de escala ao passar o mouse
+    whatsappIcon.addEventListener('mouseover', function() {
+        whatsappIcon.style.transform = 'scale(1.2)';
+        whatsappIcon.style.color = '#25d366'; // Cor do WhatsApp
+    });
+    whatsappIcon.addEventListener('mouseout', function() {
+        whatsappIcon.style.transform = 'scale(1)';
+        whatsappIcon.style.color = ''; // Retorna à cor original
+    });
+
+    // Efeito de clique (cor de fundo e animação)
+    whatsappIcon.addEventListener('click', function() {
+        whatsappIcon.style.transition = 'transform 0.2s ease-in-out, background-color 0.2s';
+        whatsappIcon.style.backgroundColor = '#25d366'; // Cor do WhatsApp
+        whatsappIcon.style.transform = 'scale(1.5)'; // Aumenta ainda mais o ícone ao clicar
+        setTimeout(() => {
+            whatsappIcon.style.backgroundColor = ''; // Retorna à cor original após um tempo
+        }, 300);
+    });
+</script>
