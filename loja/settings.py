@@ -177,10 +177,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Backend padrão para envio de e-mails
-EMAIL_HOST = 'smtp.gmail.com'  # Servidor SMTP do Gmail
-EMAIL_PORT = 587  # Porta para envio de e-mails com TLS
-EMAIL_USE_TLS = True  # Use criptografia TLS
-EMAIL_HOST_USER = 'mariabergmann27@gmail.com'  # Seu endereço de e-mail
-EMAIL_HOST_PASSWORD = 'iyzc hsia yzbb fbyk'  # A senha de aplicativo gerada no Gmail
+
 
