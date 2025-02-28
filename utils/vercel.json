@@ -2,7 +2,11 @@
   "version": 2,
   "builds": [
     {
+<<<<<<< HEAD
       "src": "seu_projeto/wsgi.py",
+=======
+      "src": "loja/wsgi.py",
+>>>>>>> 714e2975dba52f068ccd7c62ac05a650429a8c85
       "use": "@vercel/python",
       "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
     },
@@ -21,7 +25,11 @@
     },
     {
       "src": "/(.*)",
+<<<<<<< HEAD
       "dest": "seu_projeto/wsgi.py"
+=======
+      "dest": "loja/wsgi.py"
+>>>>>>> 714e2975dba52f068ccd7c62ac05a650429a8c85
     }
   ]
 }

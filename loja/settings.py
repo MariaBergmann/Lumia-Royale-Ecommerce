@@ -27,7 +27,8 @@ SECRET_KEY = 'django-insecure-^*q5vuucxw)mlruu)ecff8pd4m)=u5-y3_4#^!04e+&y$k+k**
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app', '.now.sh']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+
 
 
 
@@ -48,9 +49,6 @@ INSTALLED_APPS = [
 
 ]
 
-
-
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
@@ -94,7 +92,7 @@ WSGI_APPLICATION = 'loja.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -183,4 +181,3 @@ EMAIL_PORT = 587  # Porta para envio de e-mails com TLS
 EMAIL_USE_TLS = True  # Use criptografia TLS
 EMAIL_HOST_USER = 'mariabergmann27@gmail.com'  # Seu endereço de e-mail
 EMAIL_HOST_PASSWORD = 'iyzc hsia yzbb fbyk'  # A senha de aplicativo gerada no Gmail
-

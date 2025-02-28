@@ -1,7 +1,9 @@
 {% load omfilters %}
 
 <nav class="navbar navbar-dark bg-primary navbar-expand-lg">
-    <a class="navbar-brand" href="{% url 'produtos:lista' %}">Lúmia Royale</a>
+    <a class="navbar-brand" href="{% url 'produtos:lista' %}" style="font-family: 'Cinzel', serif; font-size: 1.8rem; color: #fff; transition: color 0.3s;">
+        Lúmia Royale
+    </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -12,7 +14,7 @@
             {% if request.user.is_authenticated %}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
+                    aria-haspopup="true" aria-expanded="false" style="transition: color 0.3s;">
                     Conta
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -23,17 +25,17 @@
             </li>
             {% else %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'perfil:criar' %}">Entrar</a>
+                <a class="nav-link" href="{% url 'perfil:criar' %}" style="transition: color 0.3s; font-family: 'Playfair Display', serif;">Entrar</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'perfil:criar' %}">Criar conta</a>
+                <a class="nav-link" href="{% url 'perfil:criar' %}" style="transition: color 0.3s; font-family: 'Playfair Display', serif;">Criar conta</a>
             </li>
             {% endif %}
 
             <!-- Carrinho de Compras -->
             {% if request.session.carrinho %}
             <li class="nav-item">
-                <a class="nav-link nav-cart-link active" href="{% url 'produtos:carrinho' %}">
+                <a class="nav-link nav-cart-link active" href="{% url 'produtos:carrinho' %}" style="transition: transform 0.3s; font-family: 'Playfair Display', serif;">
                     <span class="nav-cart-text mr-1">
                         Carrinho
                     </span>
@@ -47,7 +49,7 @@
             </li>
             {% else %}
             <li class="nav-item">
-                <a class="nav-link nav-cart-link" href="{% url 'produtos:carrinho' %}">
+                <a class="nav-link nav-cart-link" href="{% url 'produtos:carrinho' %}" style="font-family: 'Playfair Display', serif;">
                     <span class="nav-cart-text mr-1">
                         Carrinho
                     </span>
@@ -63,8 +65,11 @@
         </ul>
         <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'produtos:busca' %}">
             <input name="termo" value="{{ request.GET.termo }}" class="form-control mr-sm-2" type="search"
-                placeholder="Busca" aria-label="Busca">
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Busca</button>
+                placeholder="Busca" aria-label="Busca" style="border-radius: 30px; padding: 8px 12px;">
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit" style="border-radius: 30px; padding: 8px 20px; transition: background-color 0.3s;">
+                Busca
+            </button>
         </form>
     </div>
 </nav>
+
