@@ -35,7 +35,6 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 # Application definition
 
 INSTALLED_APPS = [
-    'loja'
     'produtos',
     'pedidos',
     'perfil',
@@ -92,12 +91,8 @@ WSGI_APPLICATION = 'loja.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'lumia_db',
-        'USER': 'admin',
-        'PASSWORD': 'GHonqperuXrmY0bomB1vs4nFjQG6p1Hh',
-        'HOST': 'dpg-cv0qvl9u0jms73alc61g-a.oregon-postgres.render.com',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
