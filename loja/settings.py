@@ -92,7 +92,7 @@ WSGI_APPLICATION = 'loja.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'lumiaDB',
+        'NAME': 'lumia_db',
         'USER': 'admin',
         'PASSWORD': 'GHonqperuXrmY0bomB1vs4nFjQG6p1Hh',
         'HOST': 'dpg-cv0qvl9u0jms73alc61g-a.oregon-postgres.render.com',
