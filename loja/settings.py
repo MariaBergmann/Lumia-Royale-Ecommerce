@@ -94,11 +94,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'lumiaDB',
         'USER': 'admin',
-        'PASSWORD':'GHonqperuXrmY0bomB1vs4nFjQG6p1Hh'
+        'PASSWORD': 'GHonqperuXrmY0bomB1vs4nFjQG6p1Hh',
         'HOST': 'dpg-cv0qvl9u0jms73alc61g-a.oregon-postgres.render.com',
         'PORT': '5432',
+    }
 }
-}
+
 
 
 # Password validation
