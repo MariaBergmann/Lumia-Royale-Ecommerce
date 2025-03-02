@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^*q5vuucxw)mlruu)ecff8pd4m)=u5-y3_4#^!04e+&y$k+k**'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False  # Defina como False para produção
+DEBUG = True  # Defina como False para produção
 
 ALLOWED_HOSTS = ['lumia-royale-ecommerce.onrender.com', 'localhost', '127.0.0.1']
 
