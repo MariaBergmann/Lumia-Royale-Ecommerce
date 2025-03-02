@@ -17,7 +17,6 @@ from django.contrib.messages import constants
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -25,13 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^*q5vuucxw)mlruu)ecff8pd4m)=u5-y3_4#^!04e+&y$k+k**'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False  # Defina como False para produção
 
 ALLOWED_HOSTS = ['lumia-royale-ecommerce.onrender.com', 'localhost', '127.0.0.1']
-
-
-
-
 
 # Application definition
 
@@ -47,21 +42,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_bootstrap4',
     'crispy_forms',
-
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # WhiteNoise para servir arquivos estáticos
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-
 ]
 
 ROOT_URLCONF = 'loja.urls'
@@ -71,7 +64,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, 'templates')
-            ],
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -85,7 +78,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'loja.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -111,8 +103,6 @@ else:
         }
     }
 
-
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
@@ -131,7 +121,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -143,21 +132,23 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Pasta para produção
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'templates/static')
+    os.path.join(BASE_DIR, 'static'),  # Pasta para desenvolvimento
 ]
 
+# Configuração do WhiteNoise para servir arquivos estáticos em produção
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Media files (uploads)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-
+# Mensagens
 MESSAGE_TAGS = {
     constants.DEBUG: 'alert-info',
     constants.ERROR: 'alert-danger',
@@ -172,22 +163,7 @@ SESSION_COOKIE_AGE = 60 * 60 * 24 * 7
 # Salvar a cada requisição
 SESSION_SAVE_EVERY_REQUEST = False
 
-# Serializer - Padrão JSON
-# SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
-
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
-
-# Para sessions em arquivos ao invés da base de dados
-# SESSION_ENGINE = "django.contrib.sessions.backends.file"
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
-
