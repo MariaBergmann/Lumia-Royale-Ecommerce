@@ -1,75 +1,84 @@
 {% load omfilters %}
 
 <nav class="navbar navbar-dark bg-primary navbar-expand-lg">
-    <a class="navbar-brand" href="{% url 'produtos:lista' %}" style="font-family: 'Cinzel', serif; font-size: 1.8rem; color: #fff; transition: color 0.3s;">
-        Lúmia Royale
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+    <div class="container-fluid">
+        <!-- Logo (alinhada à esquerda) -->
+        <a class="navbar-brand ml-3" href="{% url 'produtos:lista' %}"
+           style="font-family: 'Cinzel', serif; font-size: 1.8rem; color: #fff; transition: color 0.3s;">
+            Lúmia Royale
+        </a>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-auto">
-            {% if request.user.is_authenticated %}
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false" style="transition: color 0.3s;">
-                    Conta
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{% url 'pedido:lista' %}">Meus pedidos</a>
-                    <a class="dropdown-item" href="{% url 'perfil:criar' %}">Atualizar meus dados</a>
-                    <a class="dropdown-item" href="{% url 'perfil:logout' %}">Sair</a>
-                </div>
-            </li>
-            {% else %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'perfil:criar' %}" style="transition: color 0.3s; font-family: 'Playfair Display', serif;">Entrar</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'perfil:criar' %}" style="transition: color 0.3s; font-family: 'Playfair Display', serif;">Criar conta</a>
-            </li>
-            {% endif %}
+        <!-- Botão para mobile -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-            <!-- Carrinho de Compras -->
-            {% if request.session.carrinho %}
-            <li class="nav-item">
-                <a class="nav-link nav-cart-link active" href="{% url 'produtos:carrinho' %}" style="transition: transform 0.3s; font-family: 'Playfair Display', serif;">
-                    <span class="nav-cart-text mr-1">
-                        Carrinho
-                    </span>
-                    <span class="nav-cart-count mr-1">
-                        <strong>{{ request.session.carrinho|cart_total_qtd }}x</strong>
-                    </span>
-                    <span class="nav-cart-icon mr-2">
-                        <i class="fas fa-shopping-cart"></i>
-                    </span>
-                </a>
-            </li>
-            {% else %}
-            <li class="nav-item">
-                <a class="nav-link nav-cart-link" href="{% url 'produtos:carrinho' %}" style="font-family: 'Playfair Display', serif;">
-                    <span class="nav-cart-text mr-1">
-                        Carrinho
-                    </span>
-                    <span class="nav-cart-count mr-1">
-                        <strong>0x</strong>
-                    </span>
-                    <span class="nav-cart-icon mr-2">
-                        <i class="fas fa-shopping-cart"></i>
-                    </span>
-                </a>
-            </li>
-            {% endif %}
-        </ul>
-        <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'produtos:busca' %}">
-            <input name="termo" value="{{ request.GET.termo }}" class="form-control mr-sm-2" type="search"
-                placeholder="Busca" aria-label="Busca" style="border-radius: 30px; padding: 8px 12px;">
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit" style="border-radius: 30px; padding: 8px 20px; transition: background-color 0.3s;">
-                Busca
-            </button>
-        </form>
+        <!-- Elementos alinhados à direita -->
+        <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+                <!-- Links de navegação -->
+                <li class="nav-item">
+                    <a class="nav-link" href="#colecoes" style="font-family: 'Playfair Display', serif;">Coleções</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#sobre" style="font-family: 'Playfair Display', serif;">Sobre Nós</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#contato" style="font-family: 'Playfair Display', serif;">Contato</a>
+                </li>
+
+                <!-- Se o usuário estiver autenticado -->
+                {% if request.user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Conta
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'pedido:lista' %}">Meus pedidos</a>
+                        <a class="dropdown-item" href="{% url 'perfil:criar' %}">Atualizar meus dados</a>
+                        <a class="dropdown-item" href="{% url 'perfil:logout' %}">Sair</a>
+                    </div>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'perfil:criar' %}" style="font-family: 'Playfair Display', serif;">Entrar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'perfil:criar' %}" style="font-family: 'Playfair Display', serif;">Criar conta</a>
+                </li>
+                {% endif %}
+
+                <!-- Carrinho de Compras -->
+                <li class="nav-item">
+                    <a class="nav-link nav-cart-link active" href="{% url 'produtos:carrinho' %}"
+                       style="transition: transform 0.3s; font-family: 'Playfair Display', serif; font-weight: bold; font-size: 1.0rem;">
+                        <span class="nav-cart-text mr-1">Carrinho</span>
+                        <span class="nav-cart-count mr-1">
+                            {% with carrinho=request.session.carrinho|default:"{}" %}
+                                {% if carrinho %}
+                                <strong>{{ request.session.carrinho|cart_total_qtd }}x</strong>                                {% else %}
+                                    <strong>0x</strong>
+                                {% endif %}
+                            {% endwith %}
+                        </span>
+                        <span class="nav-cart-icon mr-2">
+                            <i class="fas fa-shopping-cart"></i>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Barra de Pesquisa (mantida no canto direito) -->
+            <form class="form-inline ml-3" method="GET" action="{% url 'produtos:busca' %}">
+                <input name="termo" value="{{ request.GET.termo }}" class="form-control mr-2" type="search"
+                    placeholder="Busca" aria-label="Busca" style="border-radius: 30px; padding: 8px 12px;">
+                <button class="btn btn-secondary" type="submit"
+                    style="border-radius: 30px; padding: 8px 20px; transition: background-color 0.3s;">
+                    Busca
+                </button>
+            </form>
+        </div>
     </div>
 </nav>
-

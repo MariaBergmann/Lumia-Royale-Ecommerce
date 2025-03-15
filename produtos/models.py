@@ -20,116 +20,84 @@
 
 """
 
-from django.conf import settings
+from django.db import models
+from decimal import Decimal
+import locale
 import os
 from PIL import Image
-from django.db import models
 from django.utils.text import slugify
-from utils import utils
+from django.conf import settings
 
+# Configuração de locale para formato brasileiro
+locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 class Produto(models.Model):
     nome = models.CharField(max_length=255)
-    descricao_curta = models.TextField(max_length=255, verbose_name= 'Descrição curta')
-    descricao_longa = models.TextField(verbose_name= 'Descrição longa')
-    imagem = models.ImageField(
-        upload_to='produto_imagens/%Y/%m/',
-        blank=True,
-        null=True
-    )
-    slug = models.SlugField(unique=True, blank=True, null=True)
-    preco_marketing = models.FloatField(verbose_name= 'Valor Original')
-    preco_marketing_promocional = models.FloatField(default=0, verbose_name= 'Valor Promocional')
-    tipo = models.CharField(
-        default='V',
-        max_length=1,
-        choices=(
-            ('V', 'Variável'),
-            ('S', 'Simples'),
-        )
-    )
+    descricao_curta = models.TextField(max_length=255, verbose_name='Descrição curta')
+    descricao_longa = models.TextField(verbose_name='Descrição longa')
+    imagem = models.ImageField(upload_to='produto_imagens/%Y/%m/', blank=True, null=True)
+    preco_marketing = models.FloatField(verbose_name='Valor Original')
+    preco_marketing_promocional = models.FloatField(default=0, verbose_name='Valor Promocional')
 
+    slug = models.SlugField(unique=True, blank=True, null=True)  # ADICIONADO
+
+    # Métodos de formatação de preços
     def get_preco_formatado(self):
-        return f'R${self.preco_marketing: .2f}'.replace('.', ',')
-    get_preco_formatado.short_description = 'Preço'
+        return f'R$ {self.preco_marketing:,.2f}'.replace(',', 'X').replace('.', ',').replace('X', '.')
 
     def get_preco_promocional_formatado(self):
-        return f'R${self.preco_marketing_promocional: .2f}'.replace('.', ',')
-    get_preco_promocional_formatado.short_description = 'Promoção'
+        return f'R$ {self.preco_marketing_promocional:,.2f}'.replace(',', 'X').replace('.', ',').replace('X', '.')
 
-
+    def __str__(self):
+        return self.nome
 
     @staticmethod
     def resize_image(img, new_width=800):
-        # Caminho completo da imagem
-        img_full_path = os.path.join(settings.MEDIA_ROOT, img.name)
-        img_pil = Image.open(img_full_path)
-
-        # Dimensões originais da imagem
-        original_width, original_height = img_pil.size
-
-        # Verifica se a largura da imagem já é menor ou igual ao limite
-        if original_width <= new_width:
-            img_pil.close()
+        """Redimensiona a imagem para um novo tamanho."""
+        if not img:
             return
 
-        # Calcula a nova altura proporcional à largura
-        new_height = round((new_width * original_height) / original_width)
+        img_full_path = os.path.join(settings.MEDIA_ROOT, img.name)
 
-        # Redimensiona a imagem
-        new_img = img_pil.resize((new_width, new_height), Image.LANCZOS)
+        if not os.path.exists(img_full_path):
+            return
 
-        # Salva a imagem redimensionada no mesmo caminho
-        new_img.save(
-            img_full_path,
-            optimize=True,
-            quality=50
-        )
+        try:
+            img_pil = Image.open(img_full_path)
+            original_width, original_height = img_pil.size
 
-        img_pil.close()
+            if original_width <= new_width:
+                img_pil.close()
+                return
 
-    """
-    Gerando o Slung automaticamente, Você pode usar a função
-    slugify da biblioteca django.utils.text para transformar uma
-    string em um slug por exemplo:
-
-    Se você criar um artigo com o título Aprenda Python
-    em 10 Passos, o slug será gerado automaticamente como
-    aprenda-python-em-10-passos, semm precisar digitar a mão.
-
-    Aqui estamos transformando uma string em um slug.
-
-    """
+            new_height = round((new_width * original_height) / original_width)
+            new_img = img_pil.resize((new_width, new_height), Image.LANCZOS)
+            new_img.save(img_full_path, optimize=True, quality=50)
+            img_pil.close()
+        except Exception as e:
+            print(f"Erro ao redimensionar imagem: {e}")
 
     def save(self, *args, **kwargs):
+        """Gera o slug automaticamente ao salvar o produto e redimensiona a imagem."""
         if not self.slug:
-            slug = f'{slugify(self.nome)}'
-            self.slung = slug
-
+            self.slug = slugify(self.nome)
 
         super().save(*args, **kwargs)
 
-        # Largura máxima da imagem
-        max_image_size = 800
-
-        if self.imagem:
-            self.resize_image(self.imagem, max_image_size)
-            def __str__(self):
-                return self.nome
-
+        if self.imagem and self.imagem.name:
+            self.resize_image(self.imagem, 800)
 
 class Variacao(models.Model):
-        produto = models.ForeignKey("Produto", on_delete=models.CASCADE)
-        nome = models.CharField(max_length=50, blank=True, null=True)
-        preco = models.FloatField(verbose_name= 'Valor Original')
-        preco_promocional = models.FloatField(default=0, verbose_name= 'Valor Promocional')
-        estoque = models.PositiveBigIntegerField(default=1)
+    produto = models.ForeignKey("Produto", on_delete=models.CASCADE)
+    nome = models.CharField(max_length=50, blank=True, null=True)
+    preco = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Valor Original')
+    preco_promocional = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'), verbose_name='Valor Promocional')
+    estoque = models.PositiveBigIntegerField(default=1)
 
-        def __str__(self):
-            return self.nome or self.produto.nome
+    def __str__(self):
+        return self.nome or self.produto.nome
 
-
-        class Meta:
-          verbose_name = 'Variacao'
-          verbose_name_plural = 'Variações'
+    class Meta:
+        verbose_name = 'Variação'
+        verbose_name_plural = 'Variações'
 

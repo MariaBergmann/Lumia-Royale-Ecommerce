@@ -1,83 +1,147 @@
-.product-price-block {
-    font-size: 1.5rem;
+/* Estilo dos produtos na coleção em destaque */
+.product-card {
+    border: 1px solid #f0f0f0;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
 }
 
-.product-price {
-    font-size: 1.5rem;
-}
-
-.product-old-price {
-    text-decoration: line-through;
-    font-size: 1rem;
-}
-
-.border-top-light-custom{
-    border-top: 1px solid rgba(0, 0, 0, 0.125);
-}
-
-@media (min-width: 34em) {
-    .card-columns {
-        -webkit-column-count: 2;
-        -moz-column-count: 2;
-        column-count: 2;
-    }
-}
-
-@media (min-width: 62em) {
-    .card-columns {
-        -webkit-column-count: 3;
-        -moz-column-count: 3;
-        column-count: 3;
-    }
-}
-
-ul.errorlist  {
-    list-style-type: none;
-    margin: 5px 0;
-    padding: 0;
-    font-size: 13px;
-    color: red;
-    display: block;
-}
-
-ul.errorlist li {
-    display: block;
-    font-weight: bold;
-}
-
-/*
-@media (min-width: 48em) {
-    .card-columns {
-        -webkit-column-count: 3;
-        -moz-column-count: 3;
-        column-count: 3;
-    }
-}
-
-
-@media (min-width: 62em) {
-    .card-columns {
-        -webkit-column-count: 4;
-        -moz-column-count: 4;
-        column-count: 4;
-    }
-}
-
-@media (min-width: 75em) {
-    .card-columns {
-        -webkit-column-count: 5;
-        -moz-column-count: 5;
-        column-count: 5;
-    }
-}
-*/
-.form-group textarea {
-    width: 100%;
-}
-.nav-cart, .nav-cart a {
+/* Fonte para o nome Lumía Royale */
+.navbar-brand {
+    font-family: 'Great Vibes', cursive;
+    /* Fonte estilo cursivo */
+    font-size: 2.5rem;
+    /* Tamanho de fonte aumentado para legibilidade */
     color: #fff;
-    text-decoration: none;
+    /* Cor branca */
+    font-weight: normal;
+    /* Peso da fonte normal */
+    letter-spacing: 1px;
+    /* Espaçamento entre as letras */
+    transform: skew(-30deg);
+    /* Deformação para dar efeito deitado */
+    transition: color 0.3s;
+    /* Efeito suave na cor */
 }
+
+/* Importando a nova fonte do Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
+
+/* Fonte para o título "Coleções em Destaque" */
+h2.text-center.mb-5 {
+    font-family: 'Playfair Display', serif;
+    /* Fonte sofisticada */
+    font-size: 2.0rem;
+    /* Tamanho de fonte maior */
+    font-weight: 700;
+    /* Peso da fonte para mais destaque */
+    color: #2c3e50;
+    /* Cor elegante */
+    letter-spacing: 1px;
+    /* Espaçamento entre as letras */
+    text-transform: uppercase;
+    /* Transformar texto para maiúsculas */
+    text-align: center;
+    /* Alinhar o texto no centro */
+    transition: color 0.3s;
+    /* Efeito suave na cor */
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
+
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
 .cart-img {
-    max-width: 150px;
+    width: 150px;
+
+}
+
+
+/* Imagem dos produtos */
+.product-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+/* Estilo do título do produto */
+.product-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.4rem;
+    color: #333333;
+    margin-bottom: 10px;
+}
+
+/* Descrição do produto */
+.product-description {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    color: #777777;
+    margin-bottom: 15px;
+}
+
+/* Preço do produto */
+.product-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* Preço promocional */
+.price-promo {
+    color: #e74c3c;
+}
+
+/* Preço original */
+.price-old {
+    text-decoration: line-through;
+    color: #aaa;
+}
+
+/* Botões "Ver Detalhes" */
+.btn-primary {
+    background-color: #D4AF37;
+    /* Cor dourada */
+    border-color: #D4AF37;
+    color: #ffffff;
+    font-family: 'Playfair Display', serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px 15px;
+    width: 100%;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #8e44ad;
+    /* Cor roxa ao passar o mouse */
+    border-color: #8e44ad;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    .product-card {
+        margin-bottom: 20px;
+    }
+
+    .product-title {
+        font-size: 1.2rem;
+    }
+
+    .product-description {
+        font-size: 0.8rem;
+    }
+
+    .product-price {
+        font-size: 1rem;
+    }
 }

@@ -14,28 +14,26 @@ class ListaProdutos(ListView):
     model = models.Produto
     template_name = 'produto/lista.html'
     context_object_name = 'produtos'
-    paginate_by = 9 # quantidade de itens por página
+    paginate_by = 9  # quantidade de itens por página
     ordering = ['-id']
 
 
 class Busca(ListaProdutos):
     def get_queryset(self, *args, **kwargs):
-        termo = self.request.GET.get('termo') or self.request.session['termo']
+        termo = self.request.GET.get('termo') or self.request.session.get('termo', '')
         qs = super().get_queryset(*args, **kwargs)
 
         if not termo:
             return qs
 
         self.request.session['termo'] = termo
+        self.request.session.save()
 
-        qs = qs.filter(
+        return qs.filter(
             Q(nome__icontains=termo) |
             Q(descricao_curta__icontains=termo) |
             Q(descricao_longa__icontains=termo)
         )
-
-        self.request.session.save()
-        return qs
 
 
 class DetalheProduto(DetailView):
@@ -54,10 +52,7 @@ class AdicionarAoCarrinho(View):
         variacao_id = self.request.GET.get('vid')
 
         if not variacao_id:
-            messages.error(
-                self.request,
-                'Produto não existe'
-            )
+            messages.error(self.request, 'Produto não existe')
             return redirect(http_referer)
 
         variacao = get_object_or_404(models.Variacao, id=variacao_id)
@@ -67,22 +62,14 @@ class AdicionarAoCarrinho(View):
         produto_id = produto.id
         produto_nome = produto.nome
         variacao_nome = variacao.nome or ''
-        preco_unitario = variacao.preco
-        preco_unitario_promocional = variacao.preco_promocional
+        preco_unitario = float(variacao.preco)  # Convertido para float
+        preco_unitario_promocional = float(variacao.preco_promocional) if variacao.preco_promocional else None
         quantidade = 1
         slug = produto.slug
-        imagem = produto.imagem
+        imagem = produto.imagem.name if produto.imagem else ''
 
-        if imagem:
-            imagem = imagem.name
-        else:
-            imagem = ''
-
-        if variacao.estoque < 1:
-            messages.error(
-                self.request,
-                'Estoque insuficiente'
-            )
+        if variacao_estoque < 1:
+            messages.error(self.request, 'Estoque insuficiente')
             return redirect(http_referer)
 
         if not self.request.session.get('carrinho'):
@@ -92,8 +79,7 @@ class AdicionarAoCarrinho(View):
         carrinho = self.request.session['carrinho']
 
         if variacao_id in carrinho:
-            quantidade_carrinho = carrinho[variacao_id]['quantidade']
-            quantidade_carrinho += 1
+            quantidade_carrinho = carrinho[variacao_id]['quantidade'] + 1
 
             if variacao_estoque < quantidade_carrinho:
                 messages.warning(
@@ -105,10 +91,10 @@ class AdicionarAoCarrinho(View):
                 quantidade_carrinho = variacao_estoque
 
             carrinho[variacao_id]['quantidade'] = quantidade_carrinho
-            carrinho[variacao_id]['preco_quantitativo'] = preco_unitario * \
-                quantidade_carrinho
-            carrinho[variacao_id]['preco_quantitativo_promocional'] = preco_unitario_promocional * \
-                quantidade_carrinho
+            carrinho[variacao_id]['preco_quantitativo'] = preco_unitario * quantidade_carrinho
+            carrinho[variacao_id]['preco_quantitativo_promocional'] = (
+                preco_unitario_promocional * quantidade_carrinho if preco_unitario_promocional else None
+            )
         else:
             carrinho[variacao_id] = {
                 'produto_id': produto_id,
@@ -143,32 +129,38 @@ class RemoverDoCarrinho(View):
         )
         variacao_id = self.request.GET.get('vid')
 
-        if not variacao_id:
+        if not variacao_id or not self.request.session.get('carrinho'):
             return redirect(http_referer)
 
-        if not self.request.session.get('carrinho'):
-            return redirect(http_referer)
+        carrinho = self.request.session['carrinho']
 
-        if variacao_id not in self.request.session['carrinho']:
+        if variacao_id not in carrinho:
             return redirect(http_referer)
-
-        carrinho = self.request.session['carrinho'][variacao_id]
 
         messages.success(
             self.request,
-            f'Produto {carrinho["produto_nome"]} {carrinho["variacao_nome"]} '
+            f'Produto {carrinho[variacao_id]["produto_nome"]} {carrinho[variacao_id]["variacao_nome"]} '
             f'removido do seu carrinho.'
         )
 
-        del self.request.session['carrinho'][variacao_id]
+        del carrinho[variacao_id]
         self.request.session.save()
         return redirect(http_referer)
 
 
 class Carrinho(View):
     def get(self, *args, **kwargs):
+        carrinho = self.request.session.get('carrinho', {})
+
+        # Convertendo os preços para float antes de passar ao template
+        for item in carrinho.values():
+            item['preco_unitario'] = float(item['preco_unitario'])
+            item['preco_unitario_promocional'] = float(item['preco_unitario_promocional']) if item['preco_unitario_promocional'] else None
+            item['preco_quantitativo'] = float(item['preco_quantitativo'])
+            item['preco_quantitativo_promocional'] = float(item['preco_quantitativo_promocional']) if item['preco_quantitativo_promocional'] else None
+
         contexto = {
-            'carrinho': self.request.session.get('carrinho', {})
+            'carrinho': carrinho
         }
 
         return render(self.request, 'produto/carrinho.html', contexto)
@@ -179,25 +171,26 @@ class ResumoDaCompra(View):
         if not self.request.user.is_authenticated:
             return redirect('perfil:criar')
 
-        perfil = Perfil.objects.filter(usuario=self.request.user).exists()
-
-        if not perfil:
-            messages.error(
-                self.request,
-                'Usuário sem perfil.'
-            )
+        if not Perfil.objects.filter(usuario=self.request.user).exists():
+            messages.error(self.request, 'Usuário sem perfil.')
             return redirect('perfil:criar')
 
         if not self.request.session.get('carrinho'):
-            messages.error(
-                self.request,
-                'Carrinho vazio.'
-            )
+            messages.error(self.request, 'Carrinho vazio.')
             return redirect('produto:lista')
+
+        carrinho = self.request.session['carrinho']
+
+        # Convertendo os preços para float antes de passar ao template
+        for item in carrinho.values():
+            item['preco_unitario'] = float(item['preco_unitario'])
+            item['preco_unitario_promocional'] = float(item['preco_unitario_promocional']) if item['preco_unitario_promocional'] else None
+            item['preco_quantitativo'] = float(item['preco_quantitativo'])
+            item['preco_quantitativo_promocional'] = float(item['preco_quantitativo_promocional']) if item['preco_quantitativo_promocional'] else None
 
         contexto = {
             'usuario': self.request.user,
-            'carrinho': self.request.session['carrinho'],
+            'carrinho': carrinho,
         }
 
         return render(self.request, 'produto/resumodacompra.html', contexto)
