@@ -29,7 +29,11 @@ from django.utils.text import slugify
 from django.conf import settings
 
 # Configuração de locale para formato brasileiro
-locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+try:
+    locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+except locale.Error:
+    locale.setlocale(locale.LC_ALL, 'C')  # Fallback seguro
+
 
 class Produto(models.Model):
     nome = models.CharField(max_length=255)
